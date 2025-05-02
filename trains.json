@@ -1,0 +1,377 @@
+[
+    {
+        "number": "101А",
+        "from": "Москва",
+        "to": "Казань",
+        "time": "10:00",
+        "platform": "1",
+        "status": "по расписанию",
+        "date": "2025-05-01",
+        "departure": "10:00",
+        "arrival": "14:00",
+        "price": "1500",
+        "upperSeats": 30,
+        "lowerSeats": 50,
+        "reservedUpperSeats": [
+            1,
+            5,
+            7
+        ],
+        "reservedLowerSeats": [
+            3,
+            4
+        ]
+    },
+    {
+        "number": "202Б",
+        "from": "Казань",
+        "to": "Москва",
+        "time": "14:30",
+        "platform": "3",
+        "status": "задержан на 2 минуты",
+        "date": "2025-05-01",
+        "departure": "14:30",
+        "arrival": "18:30",
+        "price": "1700",
+        "upperSeats": 25,
+        "lowerSeats": 45,
+        "reservedUpperSeats": [
+            1,
+            4
+        ],
+        "reservedLowerSeats": [
+            2,
+            6
+        ]
+    },
+    {
+        "number": "303В",
+        "from": "Москва",
+        "to": "Санкт-Петербург",
+        "time": "12:00",
+        "platform": "2",
+        "status": "по расписанию",
+        "date": "2025-05-01",
+        "departure": "12:00",
+        "arrival": "16:00",
+        "price": "2000",
+        "upperSeats": 40,
+        "lowerSeats": 60,
+        "reservedUpperSeats": [
+            2,
+            8
+        ],
+        "reservedLowerSeats": [
+            5,
+            7
+        ]
+    },
+    {
+        "number": "404Г",
+        "from": "Санкт-Петербург",
+        "to": "Казань",
+        "time": "16:45",
+        "platform": "4",
+        "status": "по расписанию",
+        "date": "2025-05-01",
+        "departure": "16:45",
+        "arrival": "21:15",
+        "price": "1800",
+        "upperSeats": 35,
+        "lowerSeats": 50,
+        "reservedUpperSeats": [
+            3,
+            6
+        ],
+        "reservedLowerSeats": [
+            2,
+            9
+        ]
+    },
+    {
+        "number": "505Д",
+        "from": "Казань",
+        "to": "Санкт-Петербург",
+        "time": "18:15",
+        "platform": "5",
+        "status": "по расписанию",
+        "date": "2025-05-02",
+        "departure": "18:15",
+        "arrival": "22:00",
+        "price": "1900",
+        "upperSeats": 30,
+        "lowerSeats": 55,
+        "reservedUpperSeats": [
+            4,
+            7
+        ],
+        "reservedLowerSeats": [
+            1,
+            6
+        ]
+    },
+    {
+        "number": "606Е",
+        "from": "Санкт-Петербург",
+        "to": "Москва",
+        "time": "20:00",
+        "platform": "6",
+        "status": "по расписанию",
+        "date": "2025-05-02",
+        "departure": "20:00",
+        "arrival": "23:30",
+        "price": "2100",
+        "upperSeats": 25,
+        "lowerSeats": 40,
+        "reservedUpperSeats": [
+            2,
+            5
+        ],
+        "reservedLowerSeats": [
+            4,
+            8
+        ]
+    },
+    {
+        "number": "707Ж",
+        "from": "Москва",
+        "to": "Казань",
+        "time": "22:30",
+        "platform": "7",
+        "status": "по расписанию",
+        "date": "2025-05-02",
+        "departure": "22:30",
+        "arrival": "03:00",
+        "price": "1700",
+        "upperSeats": 30,
+        "lowerSeats": 50,
+        "reservedUpperSeats": [
+            5,
+            10
+        ],
+        "reservedLowerSeats": [
+            3,
+            6
+        ]
+    },
+    {
+        "number": "808И",
+        "from": "Москва",
+        "to": "Нижний Новгород",
+        "time": "08:15",
+        "platform": "8",
+        "status": "по расписанию",
+        "date": "2025-05-02",
+        "departure": "08:15",
+        "arrival": "12:00",
+        "price": "1600",
+        "upperSeats": 25,
+        "lowerSeats": 40,
+        "reservedUpperSeats": [
+            1,
+            4
+        ],
+        "reservedLowerSeats": [
+            2,
+            7
+        ]
+    },
+    {
+        "number": "909К",
+        "from": "Казань",
+        "to": "Самара",
+        "time": "09:45",
+        "platform": "9",
+        "status": "по расписанию",
+        "date": "2025-05-03",
+        "departure": "09:45",
+        "arrival": "12:45",
+        "price": "1400",
+        "upperSeats": 35,
+        "lowerSeats": 50,
+        "reservedUpperSeats": [
+            3,
+            7
+        ],
+        "reservedLowerSeats": [
+            6,
+            10
+        ]
+    },
+    {
+        "number": "1010Л",
+        "from": "Санкт-Петербург",
+        "to": "Екатеринбург",
+        "time": "11:10",
+        "platform": "10",
+        "status": "по расписанию",
+        "date": "2025-05-03",
+        "departure": "11:10",
+        "arrival": "17:10",
+        "price": "2300",
+        "upperSeats": 25,
+        "lowerSeats": 45,
+        "reservedUpperSeats": [
+            2,
+            4
+        ],
+        "reservedLowerSeats": [
+            5,
+            9
+        ]
+    },
+    {
+        "number": "1111М",
+        "from": "Москва",
+        "to": "Уфа",
+        "time": "12:35",
+        "platform": "11",
+        "status": "по расписанию",
+        "date": "2025-05-03",
+        "departure": "12:35",
+        "arrival": "18:00",
+        "price": "1600",
+        "upperSeats": 30,
+        "lowerSeats": 55,
+        "reservedUpperSeats": [
+            6,
+            9
+        ],
+        "reservedLowerSeats": [
+            1,
+            3
+        ]
+    },
+    {
+        "number": "1212Н",
+        "from": "Казань",
+        "to": "Пермь",
+        "time": "14:00",
+        "platform": "12",
+        "status": "по расписанию",
+        "date": "2025-05-03",
+        "departure": "14:00",
+        "arrival": "18:00",
+        "price": "1700",
+        "upperSeats": 20,
+        "lowerSeats": 40,
+        "reservedUpperSeats": [
+            2,
+            5
+        ],
+        "reservedLowerSeats": [
+            3,
+            7
+        ]
+    },
+    {
+        "number": "1313О",
+        "from": "Санкт-Петербург",
+        "to": "Челябинск",
+        "time": "15:25",
+        "platform": "13",
+        "status": "по расписанию",
+        "date": "2025-05-04",
+        "departure": "15:25",
+        "arrival": "19:00",
+        "price": "1800",
+        "upperSeats": 30,
+        "lowerSeats": 50,
+        "reservedUpperSeats": [
+            1,
+            3
+        ],
+        "reservedLowerSeats": [
+            6,
+            8
+        ]
+    },
+    {
+        "number": "1414П",
+        "from": "Москва",
+        "to": "Красноярск",
+        "time": "16:50",
+        "platform": "14",
+        "status": "по расписанию",
+        "date": "2025-05-04",
+        "departure": "16:50",
+        "arrival": "22:30",
+        "price": "2500",
+        "upperSeats": 40,
+        "lowerSeats": 60,
+        "reservedUpperSeats": [
+            5,
+            10
+        ],
+        "reservedLowerSeats": [
+            2,
+            4
+        ]
+    },
+    {
+        "number": "1515Р",
+        "from": "Казань",
+        "to": "Иркутск",
+        "time": "18:15",
+        "platform": "15",
+        "status": "по расписанию",
+        "date": "2025-05-04",
+        "departure": "18:15",
+        "arrival": "23:00",
+        "price": "2200",
+        "upperSeats": 30,
+        "lowerSeats": 50,
+        "reservedUpperSeats": [
+            4,
+            7
+        ],
+        "reservedLowerSeats": [
+            1,
+            6
+        ]
+    },
+    {
+        "number": "1616С",
+        "from": "Санкт-Петербург",
+        "to": "Владивосток",
+        "time": "19:40",
+        "platform": "16",
+        "status": "по расписанию",
+        "date": "2025-05-04",
+        "departure": "19:40",
+        "arrival": "05:10",
+        "price": "2700",
+        "upperSeats": 25,
+        "lowerSeats": 45,
+        "reservedUpperSeats": [
+            2,
+            8
+        ],
+        "reservedLowerSeats": [
+            3,
+            9
+        ]
+    },
+    {
+        "number": "1717Т",
+        "from": "Москва",
+        "to": "Хабаровск",
+        "time": "21:05",
+        "platform": "17",
+        "status": "по расписанию",
+        "date": "2025-05-04",
+        "departure": "21:05",
+        "arrival": "08:30",
+        "price": "3200",
+        "upperSeats": 35,
+        "lowerSeats": 55,
+        "reservedUpperSeats": [
+            1,
+            5
+        ],
+        "reservedLowerSeats": [
+            4,
+            10
+        ]
+    }
+]

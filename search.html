@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Поиск маршрута — RailConnect</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+    <header class="header">
+        <div class="app-title" onclick="window.location.href = 'home.html'">RailConnect</div>
+        <nav class="nav">
+            <button class="burger" id="burgerBtn">&#9776;</button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="home.html">Главная</a></li>
+                <li><a href="search.html">Поиск поездов</a></li>
+                <li><a href="#" onclick="logout()">Выход</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <h2>Поиск маршрута</h2>
+        <section id="searchRoute">
+            <div class="search-row">
+                <div class="input-wrapper">
+                    <input type="text" id="fromInput" autocomplete="off" placeholder="Откуда">
+                    <div class="suggestions" id="fromSuggestions"></div>
+                </div>
+                <div class="input-wrapper">
+                    <input type="text" id="toInput" autocomplete="off" placeholder="Куда">
+                    <div class="suggestions" id="toSuggestions"></div>
+                </div>
+                <div class="input-wrapper">
+                    <input type="date" id="dateInput">
+                </div>
+                <button id="searchBtn">Найти</button>
+            </div>
+            <div id="searchResults"></div>
+        </section>
+        <div id="routeResults"></div>
+
+        <dialog id="bookingDialog">
+            <form method="dialog" id="bookingForm">
+                <h3>Бронирование места</h3>
+                <p id="selectedTrain"></p>
+                <label>
+                    Тип места:
+                    <select id="seatType">
+                        <option value="upper">Верхнее</option>
+                        <option value="lower">Нижнее</option>
+                    </select>
+                </label>
+                <div class="dialog-buttons">
+                    <button type="submit">Забронировать</button>
+                    <button type="button" onclick="document.getElementById('bookingDialog').close()">Отмена</button>
+                </div>
+            </form>
+        </dialog>
+
+        <div id="seatModal" class="modal">
+            <div class="modal-content">
+                <h2>Выберите место</h2>
+                <div id="trainInfo"></div>
+                <div id="seatOptions">
+                    <h3>Тип места</h3>
+                    <button id="upperSeatBtn">Верхнее место</button>
+                    <button id="lowerSeatBtn">Нижнее место</button>
+                </div>
+                <div id="availableSeats"></div>
+                <button id="bookBtn">Забронировать</button>
+                <button id="closeModalBtn">Закрыть</button>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>

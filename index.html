@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Вход — RailConnect</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+    <header class="header">
+        <div class="app-title" onclick="window.location.href = 'home.html'">RailConnect</div>
+        <nav class="nav">
+            <button class="burger" id="burgerBtn">&#9776;</button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="home.html">Главная</a></li>
+                <li><a href="search.html">Поиск поездов</a></li>
+                <li><a href="#" onclick="logout()">Выход</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main class="login-container">
+        <h1>RailConnect</h1>
+        <input type="text" id="username" placeholder="Имя пользователя" />
+        <input type="password" id="password" placeholder="Пароль" />
+        <button onclick="login() " class="sign-in-btn">Войти</button>
+        <p id="error" class="error"></p>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,31 @@
+[
+    {
+        "id": 1,
+        "username": "user1",
+        "password": "1234",
+        "bookings": [
+            {
+                "trainNumber": "101А",
+                "seat": "верхний",
+                "status": "забронировано"
+            },
+            {
+                "trainNumber": "202Б",
+                "seat": "нижний",
+                "status": "забронировано"
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "username": "user2",
+        "password": "4321",
+        "bookings": [
+            {
+                "trainNumber": "303В",
+                "seat": "нижний",
+                "status": "забронировано"
+            }
+        ]
+    }
+]

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Выбор станции — RailConnect</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+    <header class="header">
+        <div class="app-title" onclick="window.location.href = 'home.html'">RailConnect</div>
+        <nav class="nav">
+            <button class="burger" id="burgerBtn">&#9776;</button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="home.html">Главная</a></li>
+                <li><a href="search.html">Поиск поездов</a></li>
+                <li><a href="#" onclick="logout()">Выход</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <h2>Табло</h2>
+        <div class="search-container">
+            <div class="input-wrapper">
+                <input type="text" id="stationSearch" placeholder="Введите станцию..." autocomplete="off" />
+                <div class="suggestions" id="stationSuggestions"></div>
+            </div>
+            <div class="input-wrapper">
+                <input type="date" id="dateInput" />
+            </div>
+            <!-- Кнопка поиска для табло -->
+            <div class="input-wrapper">
+                <div id="searchResults"></div>
+                <button id="searchTabloBtn">Поиск на табло</button>
+            </div>
+        </div>
+        <div id="stationBoard"></div>
+    </main>
+
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
