@@ -258,7 +258,7 @@ document.getElementById('searchTabloBtn')?.addEventListener('click', () => {
 
     // Фильтруем по станции и дате
     const matchedTrains = trains.filter(t => {
-        const matchStation = t.from.toLowerCase() === station.toLowerCase() || t.to.toLowerCase() === station.toLowerCase();
+        const matchStation = t.from.toLowerCase() === station.toLowerCase();
         const matchDate = t.date.startsWith(date);
         return matchStation && matchDate;
     });
