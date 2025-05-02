@@ -2,7 +2,7 @@
     "name": "RailConnect",
     "short_name": "RailConnect",
     "start_url": "./index.html",
-    "display": "standalone",
+    "display": "fullscreen",
     "background_color": "#ffffff",
     "theme_color": "#005BBB",
     "icons": [
