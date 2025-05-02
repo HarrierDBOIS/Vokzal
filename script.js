@@ -266,6 +266,8 @@ document.getElementById('searchTabloBtn')?.addEventListener('click', () => {
     if (matchedTrains.length === 0) {
         results.textContent = 'Подходящих поездов не найдено.';
         return;
+    } else {
+        results.textContent = '';
     }
 
     // Отображение найденных поездов
