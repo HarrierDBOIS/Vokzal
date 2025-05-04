@@ -101,7 +101,7 @@ document.getElementById('loginBtn')?.addEventListener('click', login);
 
 document.addEventListener('DOMContentLoaded', async () => {
     await loadInitialData();
-    if (location.pathname.endsWith('home.html') || location.pathname.endsWith('search.html') || location.pathname.endsWith('tickets.html')) {
+    if (location.pathname.endsWith('home.html') || location.pathname.endsWith('search.html') || location.pathname.endsWith('bookings.html')) {
         if (sessionStorage.getItem('auth') !== 'true') {
             window.location.href = 'index.html';
         }
