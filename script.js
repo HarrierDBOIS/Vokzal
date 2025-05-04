@@ -63,7 +63,11 @@ function login() {
         error.textContent = 'Неверные имя пользователя или пароль!';
     }
 }
-
+document.addEventListener('DOMContentLoaded', () => {
+    if (sessionStorage.getItem('auth') !== 'true') {
+        document.querySelector('.nav').style.display = 'none';
+    }
+});
 function register() {
     const username = document.getElementById('regUsername').value.trim();
     const password = document.getElementById('regPassword').value.trim();
@@ -114,6 +118,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     if (sessionStorage.getItem('auth') === 'true') {
+        
         const currentUserId = sessionStorage.getItem('currentUserId');
         const user = users.find(u => u.id == currentUserId);
     }
@@ -390,7 +395,7 @@ document.getElementById('bookingForm')?.addEventListener('submit', (e) => {
 
     user.bookings.push({
         trainNumber: train.number,
-        seat: `${seatType} №${seatNumber}`,
+        seat: `${seatType === 'upper' ? 'верхнее' : 'нижнее'} №${seatNumber}`,
         status: 'забронировано'
     });
 
