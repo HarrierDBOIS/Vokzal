@@ -1,102 +1,146 @@
-async function loadTrains() {
-    try {
-        const response = await fetch('trains.json');
-        const data = await response.json();
-        console.log('Данные:', data);
-        return data;
-    } catch (error) {
-        console.error('Ошибка загрузки:', error);
+let trains = [];
+let users = [];
+let allStations = [];
+
+async function loadInitialData() {
+    // Загрузка поездов
+    if (!sessionStorage.getItem('trains')) {
+        const trainsResponse = await fetch('trains.json');
+        trains = await trainsResponse.json();
+        sessionStorage.setItem('trains', JSON.stringify(trains));
+    } else {
+        trains = JSON.parse(sessionStorage.getItem('trains'));
+    }
+
+    // Загрузка пользователей
+    if (!sessionStorage.getItem('users')) {
+        const usersResponse = await fetch('users.json');
+        users = await usersResponse.json();
+        sessionStorage.setItem('users', JSON.stringify(users));
+    } else {
+        users = JSON.parse(sessionStorage.getItem('users'));
+    }
+
+    // Формирование списка станций
+    if (!sessionStorage.getItem('allStations')) {
+        allStations = [...new Set(trains.flatMap(t => [t.from, t.to]))];
+        sessionStorage.setItem('allStations', JSON.stringify(allStations));
+    } else {
+        allStations = JSON.parse(sessionStorage.getItem('allStations'));
     }
 }
 
-let trains = [];
-let allStations = [];
-let users = [];
+// Если данных нет — можно здесь инициализировать пустыми или предзаполненными массивами
+if (trains.length === 0) {
+    // Пример: sessionStorage.setItem('trains', JSON.stringify([...]));
+    console.warn("Trains not found in sessionStorage");
+}
+
+if (users.length === 0) {
+    console.warn("Users not found in sessionStorage");
+}
+
+function saveTrains() {
+    sessionStorage.setItem('trains', JSON.stringify(trains));
+}
+
+function saveUsers() {
+    sessionStorage.setItem('users', JSON.stringify(users));
+}
 
 function login() {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
     const error = document.getElementById('error');
 
-    // Находим пользователя с введенными логином и паролем
     const user = users.find(u => u.username === username && u.password === password);
 
     if (user) {
         sessionStorage.setItem('auth', 'true');
-        sessionStorage.setItem('currentUserId', user.id);  // Сохраняем ID пользователя в sessionStorage
-        window.location.href = 'home.html';  // Переходим на главную страницу
+        sessionStorage.setItem('currentUserId', user.id);
+        window.location.href = 'home.html';
     } else {
         error.textContent = 'Неверные имя пользователя или пароль!';
     }
 }
 
+function register() {
+    const username = document.getElementById('regUsername').value.trim();
+    const password = document.getElementById('regPassword').value.trim();
+    const error = document.getElementById('regError');
+
+    if (!username || !password) {
+        error.textContent = 'Пожалуйста, заполните все поля.';
+        return;
+    }
+
+    const existingUser = users.find(u => u.username === username);
+    if (existingUser) {
+        error.textContent = 'Пользователь с таким именем уже существует.';
+        return;
+    }
+
+    const newUser = {
+        id: users.length > 0 ? Math.max(...users.map(u => u.id)) + 1 : 1,
+        username,
+        password
+    };
+
+    users.push(newUser);
+    saveUsers();
+    sessionStorage.setItem('users', JSON.stringify(users));
+
+    // Автоматический вход
+    sessionStorage.setItem('auth', 'true');
+    sessionStorage.setItem('currentUserId', newUser.id);
+
+    window.location.href = 'home.html';
+}
+
 document.getElementById('loginBtn')?.addEventListener('click', login);
 
-// Загрузка пользователей из JSON
-fetch('users.json')
-    .then(response => response.json())
-    .then(data => {
-        users = data;  // Записываем данные о пользователях в переменную
-        console.log('Данные о пользователях:', users);
-    })
-    .catch(error => console.error('Ошибка при загрузке данных о пользователях:', error));
-
-// Проверка авторизации
-document.addEventListener('DOMContentLoaded', () => {
-    // Проверяем, если находимся на странице home, search или tickets
+document.addEventListener('DOMContentLoaded', async () => {
+    await loadInitialData();
     if (location.pathname.endsWith('home.html') || location.pathname.endsWith('search.html') || location.pathname.endsWith('tickets.html')) {
-        // Проверяем, авторизован ли пользователь
         if (sessionStorage.getItem('auth') !== 'true') {
-            window.location.href = 'index.html';  // Если не авторизован, перенаправляем на страницу логина
+            window.location.href = 'index.html';
         }
     }
 
     const dateInput = document.getElementById('dateInput');
     if (dateInput) {
         const today = new Date().toISOString().split('T')[0];
-        dateInput.value = today;  // Устанавливаем сегодняшнюю дату в поле ввода даты
+        dateInput.value = today;
     }
-});
 
-// Логаут
-function logout() {
-    sessionStorage.removeItem('auth');  // Удаляем информацию об авторизации
-    sessionStorage.removeItem('currentUserId');  // Удаляем информацию о текущем пользователе
-    window.location.href = 'index.html';  // Перенаправляем на страницу логина
-}
-
-// Если пользователь авторизован, можно отобразить его имя
-document.addEventListener('DOMContentLoaded', () => {
     if (sessionStorage.getItem('auth') === 'true') {
         const currentUserId = sessionStorage.getItem('currentUserId');
         const user = users.find(u => u.id == currentUserId);
-        if (user) {
-            document.getElementById('userGreeting').textContent = `Привет, ${user.username}!`;
+    }
+
+    if (trains.length > 0) {
+        allStations = [...new Set(trains.flatMap(t => [t.from, t.to]))];
+
+        if (document.getElementById('fromInput')) {
+            setupAutocomplete('fromInput', 'fromSuggestions');
+            setupAutocomplete('toInput', 'toSuggestions');
+        }
+        if (document.getElementById('stationSearch')) {
+            setupAutocomplete('stationSearch', 'stationSuggestions');
         }
     }
 });
-loadTrains().then(data => {
-    trains = data;
-    allStations = [...new Set(trains.flatMap(t => [t.from, t.to]))];
-    console.log('Поезда загружены:', trains);
 
-    if (document.getElementById('fromInput')) {
-        setupAutocomplete('fromInput', 'fromSuggestions');
-        setupAutocomplete('toInput', 'toSuggestions');
-    }
-    if (document.getElementById('stationSearch')) {
-        setupAutocomplete('stationSearch', 'stationSuggestions');
-    }
-    // Теперь можно использовать trains
-});
-
-// Автозаполнение станций
-
+function logout() {
+    sessionStorage.removeItem('auth');
+    sessionStorage.removeItem('currentUserId');
+    window.location.href = 'index.html';
+}
 
 function setupAutocomplete(inputId, suggestionId) {
     const input = document.getElementById(inputId);
     const suggestionBox = document.getElementById(suggestionId);
-    console.log(allStations);
+
     input.addEventListener('input', () => {
         const value = input.value.trim().toLowerCase();
         suggestionBox.innerHTML = '';
@@ -126,7 +170,6 @@ function setupAutocomplete(inputId, suggestionId) {
     });
 }
 
-// Поиск поездов
 document.getElementById('searchBtn')?.addEventListener('click', () => {
     const from = document.getElementById('fromInput').value.trim();
     const to = document.getElementById('toInput').value.trim();
@@ -152,7 +195,6 @@ document.getElementById('searchBtn')?.addEventListener('click', () => {
     matchedTrains.forEach(t => {
         const card = document.createElement('div');
         card.className = 'train-card';
-
         card.innerHTML = `
             <div class="train-header">
                 <span class="train-number">Поезд №${t.number}</span>
@@ -164,19 +206,18 @@ document.getElementById('searchBtn')?.addEventListener('click', () => {
                 <div><strong>Платформа:</strong> ${t.platform}</div>
                 <div><strong>Стоимость:</strong> ${t.price}₽</div>
                 <div><strong>Места:</strong> Верхние: ${t.upperSeats}, Нижние: ${t.lowerSeats}</div>
+                <div><button onclick="showBookingDialog('${t.number}')">Забронировать</button></div>
             </div>
         `;
         routeResults.appendChild(card);
     });
 });
 
-// Диалог выбора места
 function openSeatDialog(trainNumber) {
     const train = trains.find(t => t.number === trainNumber);
     if (!train) return;
 
     const seatType = prompt(`Выберите тип места (верхнее/нижнее)\nСвободно: Верхние: ${train.upperSeats}, Нижние: ${train.lowerSeats}`);
-
     if (!seatType || !['верхнее', 'нижнее'].includes(seatType.toLowerCase())) return;
 
     if (seatType === 'верхнее' && train.upperSeats <= 0) {
@@ -188,9 +229,10 @@ function openSeatDialog(trainNumber) {
         return;
     }
 
-    // Бронирование
     if (seatType === 'верхнее') train.upperSeats--;
     if (seatType === 'нижнее') train.lowerSeats--;
+
+    saveTrains();
 
     const tickets = JSON.parse(localStorage.getItem('tickets') || '[]');
     tickets.push({ trainNumber: train.number, to: train.to, time: train.time, date: train.date, seat: seatType });
@@ -199,7 +241,6 @@ function openSeatDialog(trainNumber) {
     alert(`Вы забронировали ${seatType} место на поезд №${train.number}`);
 }
 
-// Страница "Мои билеты"
 if (location.pathname.endsWith('tickets.html')) {
     const myTickets = JSON.parse(localStorage.getItem('tickets') || '[]');
     const container = document.getElementById('myTickets');
@@ -231,13 +272,13 @@ function cancelTicket(index) {
     if (train) {
         if (t.seat === 'верхнее') train.upperSeats++;
         if (t.seat === 'нижнее') train.lowerSeats++;
+        saveTrains();
     }
     tickets.splice(index, 1);
     localStorage.setItem('tickets', JSON.stringify(tickets));
     location.reload();
 }
 
-// Навигационное меню
 document.getElementById('burgerBtn')?.addEventListener('click', () => {
     document.getElementById('navLinks').classList.toggle('active');
 });
@@ -248,15 +289,13 @@ document.getElementById('searchTabloBtn')?.addEventListener('click', () => {
     const stationBoard = document.getElementById('stationBoard');
     const results = document.getElementById('searchResults');
 
-    stationBoard.innerHTML = '';  // Очистить результаты поиска
+    stationBoard.innerHTML = '';
 
-    // Проверка на наличие обязательных данных
     if (!station || !date) {
         results.textContent = 'Пожалуйста, заполните все поля.';
         return;
     }
 
-    // Фильтруем по станции и дате
     const matchedTrains = trains.filter(t => {
         const matchStation = t.from.toLowerCase() === station.toLowerCase();
         const matchDate = t.date.startsWith(date);
@@ -270,11 +309,9 @@ document.getElementById('searchTabloBtn')?.addEventListener('click', () => {
         results.textContent = '';
     }
 
-    // Отображение найденных поездов
     matchedTrains.forEach(t => {
         const card = document.createElement('div');
         card.className = 'train-card';
-
         card.innerHTML = `
             <div class="train-header">
                 <span class="train-number">Поезд №${t.number}</span>
@@ -287,89 +324,95 @@ document.getElementById('searchTabloBtn')?.addEventListener('click', () => {
                 <div><strong>Платформа:</strong> ${t.platform}</div>
                 <div><strong>Стоимость:</strong> ${t.price}₽</div>
                 <div><strong>Места:</strong> Верхние: ${t.upperSeats}, Нижние: ${t.lowerSeats}</div>
-            </div>
+                <div><button onclick="showBookingDialog('${t.number}')">Забронировать</button></div>
+
         `;
         stationBoard.appendChild(card);
     });
 });
 
-// let selectedSeatType = null;
-// let selectedTrain = null;
+let selectedTrainNumber = null;
 
-// // Открыть модальное окно с информацией о поезде
-// function openSeatDialog(trainNumber) {
-//     selectedTrain = trains.find(t => t.number === trainNumber);
-//     if (!selectedTrain) return;
+function showBookingDialog(trainNumber) {
+    const dialog = document.getElementById('bookingDialog');
+    const trains = JSON.parse(sessionStorage.getItem('trains')) || [];
+    const train = trains.find(t => t.number === trainNumber);
+    selectedTrainNumber = trainNumber;
 
-//     // Заполнить информацию о поезде
-//     const trainInfo = document.getElementById('trainInfo');
-//     trainInfo.innerHTML = `
-//         <p><strong>Маршрут:</strong> ${selectedTrain.from} → ${selectedTrain.to}</p>
-//         <p><strong>Стоимость:</strong> ${selectedTrain.price}₽</p>
-//     `;
+    if (!train) return;
 
-//     // Сброс выбора
-//     selectedSeatType = null;
-//     document.getElementById('upperSeatBtn').classList.remove('selected');
-//     document.getElementById('lowerSeatBtn').classList.remove('selected');
+    document.getElementById('selectedTrain').textContent = `Поезд №${train.number} — ${train.from} → ${train.to}, ${train.date}, ${train.time}`;
+    document.getElementById('seatType').value = 'upper'; // Начнем с верхнего места по умолчанию
+    dialog.showModal();
+}
 
-//     // Показать модальное окно
-//     document.getElementById('seatModal').style.display = 'block';
-// }
+document.getElementById('closeDialogBtn')?.addEventListener('click', () => {
+    document.getElementById('bookingDialog').close();
+});
 
-// // Закрыть модальное окно
-// function closeSeatDialog() {
-//     document.getElementById('seatModal').style.display = 'none';
-// }
+document.getElementById('bookingForm')?.addEventListener('submit', (e) => {
+    e.preventDefault();
 
-// // Выбор верхнего места
-// document.getElementById('upperSeatBtn').addEventListener('click', () => {
-//     selectedSeatType = 'upper';
-//     document.getElementById('upperSeatBtn').classList.add('selected');
-//     document.getElementById('lowerSeatBtn').classList.remove('selected');
-// });
+    const seatType = document.getElementById('seatType').value;
+    const trains = JSON.parse(sessionStorage.getItem('trains')) || [];
+    const users = JSON.parse(sessionStorage.getItem('users')) || [];
+    const currentUserId = parseInt(sessionStorage.getItem('currentUserId'));
+    const user = users.find(u => u.id === currentUserId);
+    const train = trains.find(t => t.number === selectedTrainNumber);
 
-// // Выбор нижнего места
-// document.getElementById('lowerSeatBtn').addEventListener('click', () => {
-//     selectedSeatType = 'lower';
-//     document.getElementById('lowerSeatBtn').classList.add('selected');
-//     document.getElementById('upperSeatBtn').classList.remove('selected');
-// });
+    const messageEl = document.getElementById('bookingMessage');
+    messageEl.textContent = ''; // очистить старое сообщение
 
-// // Бронирование места
-// document.getElementById('bookBtn').addEventListener('click', () => {
-//     if (!selectedSeatType || !selectedTrain) {
-//         alert('Пожалуйста, выберите тип места.');
-//         return;
-//     }
+    if (!train || !user) return;
 
-//     const seatField = selectedSeatType === 'upper' ? 'upperSeats' : 'lowerSeats';
+    const seatList = seatType === 'upper' ? train.reservedUpperSeats : train.reservedLowerSeats;
+    const maxSeats = seatType === 'upper' ? train.upperSeats : train.lowerSeats;
 
-//     if (selectedTrain[seatField] > 0) {
-//         selectedTrain[seatField]--;
+    let seatNumber = null;
+    for (let i = 1; i <= maxSeats; i++) {
+        if (!seatList.includes(i)) {
+            seatNumber = i;
+            break;
+        }
+    }
 
-//         // Сохранить заказ пользователю (предполагаем, что есть currentUserId)
-//         const userId = sessionStorage.getItem('currentUserId');
-//         if (userId) {
-//             // Здесь должен быть код для записи в users.json (в реальности через сервер)
-//             console.log(`Пользователь ${userId} забронировал ${selectedSeatType} место в поезде ${selectedTrain.number}`);
-//         }
+    if (!seatNumber) {
+        messageEl.style.color = 'red';
+        messageEl.textContent = `Нет доступных ${seatType === 'upper' ? 'верхних' : 'нижних'} мест!`;
+        return;
+    }
 
-//         alert(`Место забронировано! ${seatField === 'upperSeats' ? 'Верхнее' : 'Нижнее'} место.`);
+    seatList.push(seatNumber);
+    if (seatType === 'upper') train.upperSeats--;
+    else train.lowerSeats--;
 
-//         closeSeatDialog();
-//     } else {
-//         alert('К сожалению, такие места закончились.');
-//     }
-// });
+    sessionStorage.setItem('trains', JSON.stringify(trains));
 
-// // Кнопка закрытия окна
-// document.getElementById('closeModalBtn').addEventListener('click', closeSeatDialog);
+    user.bookings.push({
+        trainNumber: train.number,
+        seat: `${seatType} №${seatNumber}`,
+        status: 'забронировано'
+    });
 
-// // Дополнительно можно закрывать окно при клике вне него
-// window.addEventListener('click', (e) => {
-//     const modal = document.getElementById('seatModal');
-//     if (e.target === modal) {
-//         closeSeatDialog();
-//     }
-// });
+    sessionStorage.setItem('users', JSON.stringify(users));
+
+    messageEl.style.color = 'green';
+    messageEl.textContent = `Вы забронировали ${seatType === 'upper' ? 'верхнее' : 'нижнее'} место №${seatNumber} на поезд №${train.number}`;
+
+    // Не закрываем модалку сразу, чтобы пользователь видел результат
+    // Можно закрыть через timeout, если нужно
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const userId = sessionStorage.getItem('currentUserId');
+    const users = JSON.parse(sessionStorage.getItem('users') || '[]');
+
+    const currentUser = users.find(u => u.id == userId);
+    if (currentUser) {
+        const userDisplay = document.getElementById('userDisplay');
+        if (userDisplay) {
+            userDisplay.textContent = `Пользователь: ${currentUser.username}`;
+        }
+    }
+});
+

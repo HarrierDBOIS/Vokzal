@@ -3,10 +3,8 @@
 
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Вход — RailConnect</title>
+    <title>Регистрация — RailConnect</title>
     <link rel="stylesheet" href="styles.css" />
-    <link rel="manifest" href="manifest.json">
 </head>
 
 <body>
@@ -15,7 +13,6 @@
         <nav class="nav">
             <button class="burger" id="burgerBtn">&#9776;</button>
             <ul class="nav-links" id="navLinks">
-                <div class="user-display" id="userDisplay"></div>
                 <li><a href="home.html">Главная</a></li>
                 <li><a href="search.html">Поиск поездов</a></li>
                 <li><a href="bookings.html">Мои Бронирования</a></li>
@@ -24,14 +21,13 @@
         </nav>
     </header>
     <main class="login-container container">
-        <h1>RailConnect</h1>
-        <input type="text" id="username" placeholder="Имя пользователя" />
-        <input type="password" id="password" placeholder="Пароль" />
-        <button onclick="login() " class="loginBtn">Войти</button>
-        <button onclick="window.location.href = 'register.html'" class="registerBtn">Регистрация</button>
-        <p id="error" class="error"></p>
+        <h1>Регистрация</h1>
+        <input type="text" id="regUsername" placeholder="Имя пользователя" />
+        <input type="password" id="regPassword" placeholder="Пароль" />
+        <button onclick="register()" class="loginBtn">Зарегистрироваться</button>
+        <p id="regError" class="error"></p>
+        <p style="text-align: center;"><a href="index.html">Уже есть аккаунт? Войти</a></p>
     </main>
-
     <script src="script.js"></script>
 </body>
 

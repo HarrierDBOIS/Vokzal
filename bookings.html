@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Мои Бронирования — RailConnect</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+    <header class="header">
+        <div class="app-title" onclick="window.location.href = 'home.html'">RailConnect</div>
+        <nav class="nav">
+            <button class="burger" id="burgerBtn">&#9776;</button>
+            <ul class="nav-links" id="navLinks">
+                <div class="user-display" id="userDisplay"></div>
+                <li><a href="home.html">Табло</a></li>
+                <li><a href="search.html">Поиск поездов</a></li>
+                <li><a href="bookings.html">Мои Бронирования</a></li>
+                <li><a href="#" onclick="logout()">Выход</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container">
+        <h2>Мои Бронирования</h2>
+        <div id="bookingsList"></div>
+    </main>
+
+    <script>
+        function logout() {
+            sessionStorage.removeItem('currentUserId');
+            window.location.href = 'index.html';
+        }
+
+        function renderBookings() {
+            const users = JSON.parse(sessionStorage.getItem('users')) || [];
+            const trains = JSON.parse(sessionStorage.getItem('trains')) || [];
+            const currentUserId = parseInt(sessionStorage.getItem('currentUserId'));
+            const user = users.find(u => u.id === currentUserId);
+            const bookingsList = document.getElementById('bookingsList');
+
+            bookingsList.innerHTML = '';
+
+            if (!user || !user.bookings.length) {
+                bookingsList.innerHTML = '<p>У вас нет забронированных билетов.</p>';
+                return;
+            }
+
+            user.bookings.forEach((booking, index) => {
+                const train = trains.find(t => t.number === booking.trainNumber);
+                const bookingItem = document.createElement('div');
+                bookingItem.className = 'booking-item';
+
+                bookingItem.innerHTML = `
+                    <p><strong>Поезд:</strong> №${booking.trainNumber} (${train?.from} → ${train?.to})</p>
+                    <p><strong>Дата:</strong> ${train?.date} <strong>Время:</strong> ${train?.time}</p>
+                    <p><strong>Место:</strong> ${booking.seat}</p>
+                    <p><strong>Статус:</strong> ${booking.status}</p>
+                    <button onclick="cancelBooking(${index})">Отменить</button>
+                `;
+
+                bookingsList.appendChild(bookingItem);
+            });
+        }
+
+        function cancelBooking(bookingIndex) {
+            const users = JSON.parse(sessionStorage.getItem('users')) || [];
+            const trains = JSON.parse(sessionStorage.getItem('trains')) || [];
+            const currentUserId = parseInt(sessionStorage.getItem('currentUserId'));
+            const user = users.find(u => u.id === currentUserId);
+
+            if (!user) return;
+
+            const booking = user.bookings[bookingIndex];
+            const train = trains.find(t => t.number === booking.trainNumber);
+
+            // Освобождаем место
+            const isUpper = booking.seat.includes('upper') || booking.seat.includes('верхн');
+            const seatNumber = parseInt(booking.seat.replace(/\D/g, '')); // Извлекаем цифры
+
+            if (train) {
+                if (isUpper) {
+                    train.reservedUpperSeats = train.reservedUpperSeats.filter(s => s !== seatNumber);
+                    train.upperSeats++;
+                } else {
+                    train.reservedLowerSeats = train.reservedLowerSeats.filter(s => s !== seatNumber);
+                    train.lowerSeats++;
+                }
+            }
+
+            // Удаляем бронь
+            user.bookings.splice(bookingIndex, 1);
+
+            // Обновляем sessionStorage
+            sessionStorage.setItem('users', JSON.stringify(users));
+            sessionStorage.setItem('trains', JSON.stringify(trains));
+
+            renderBookings();
+        }
+
+        renderBookings();
+    </script>
+    <script src="script.js"></script>
+</body>
+
+</html>

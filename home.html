@@ -14,13 +14,15 @@
         <nav class="nav">
             <button class="burger" id="burgerBtn">&#9776;</button>
             <ul class="nav-links" id="navLinks">
-                <li><a href="home.html">Главная</a></li>
+                <div class="user-display" id="userDisplay"></div>
+                <li><a href="home.html">Табло</a></li>
                 <li><a href="search.html">Поиск поездов</a></li>
+                <li><a href="bookings.html">Мои Бронирования</a></li>
                 <li><a href="#" onclick="logout()">Выход</a></li>
             </ul>
         </nav>
     </header>
-    <main>
+    <main class="container">
         <h2>Табло</h2>
         <div class="search-container">
             <div class="input-wrapper">
@@ -37,9 +39,25 @@
             </div>
         </div>
         <div id="stationBoard"></div>
+        <dialog id="bookingDialog">
+            <form id="bookingForm">
+                <p id="selectedTrain"></p>
+        
+                <label for="seatType">Тип места:</label>
+                <select id="seatType">
+                    <option value="upper">Верхнее</option>
+                    <option value="lower">Нижнее</option>
+                </select>
+        
+                <button type="submit">Забронировать</button>
+                <button type="button" id="closeDialogBtn">Назад</button>
+        
+                <p id="bookingMessage" style="color: green; margin-top: 10px;"></p> <!-- Сообщение -->
+            </form>
+        </dialog>
+
     </main>
 
-    <script src="data.js"></script>
     <script src="script.js"></script>
 </body>
 
