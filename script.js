@@ -87,7 +87,8 @@ function register() {
     const newUser = {
         id: users.length > 0 ? Math.max(...users.map(u => u.id)) + 1 : 1,
         username,
-        password
+        password,
+        bookings: []
     };
 
     users.push(newUser);
